@@ -52,10 +52,14 @@ class Window(tk.Frame):
             aps.extend([i for i in range(97,123)])
             
         if self.excsim.get():
-            aps.extend([i for i in [105, 73, 108, 76, 49, 111, 48, 79]])
+            for i in [105, 73, 108, 76, 49, 111, 48, 79]:
+                aps.remove(i)
+                #aps.extend([i for i in [105, 73, 108, 76, 49, 111, 48, 79]])
             
         if self.excamg.get():
-            aps.extend([123, 124, 91, 93, 40, 41, 47, 92, 96, 126, 39, 34, 44, 59, 58, 46, 60, 62])
+            for i in [123, 124, 91, 93, 40, 41, 47, 92, 96, 126, 39, 34, 44, 59, 58, 46, 60, 62]:
+                aps.remove(i)
+                #aps.extend([123, 124, 91, 93, 40, 41, 47, 92, 96, 126, 39, 34, 44, 59, 58, 46, 60, 62])
         
         random.shuffle(aps)
         fc = random.sample(aps, self.length.get())
@@ -113,7 +117,7 @@ class Window(tk.Frame):
         excSimBox.grid(row=5, column=0)
         
         # Exclude ambiguous characters
-        excAmbBox = tk.Checkbutton(inFrame, text='Do you want to include capital leters?', variable=self.excamg, onvalue=1, offvalue=0)
+        excAmbBox = tk.Checkbutton(inFrame, text='Do you want to exclude ambiguous characters?', variable=self.excamg, onvalue=1, offvalue=0)
         excAmbBox.grid(row=6, column=0)
               
         # Output frame
