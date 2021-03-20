@@ -8,69 +8,110 @@ Created on Fri Mar 19 23:13:36 2021
 import random
 import tkinter as tk
 
-
 class Window(tk.Frame):
     
     def __init__(self, parent):
         tk.Frame.__init__(self, parent) 
         self.parent = parent
+        # The final password
         self.password = tk.StringVar()
         self.password.set('Here shows the password')
+        # The length of the password
         self.length = tk.IntVar() 
-        self.length.set(12) 
+        self.length.set(12)
+        # Include symbols, 1-yes, 2-no
         self.symbols = tk.IntVar() 
-        self.symbols.set(1) 
+        self.symbols.set(1)
+        # Include capital letters, 1-yes, 2-no
         self.capLetters = tk.IntVar()
-        self.capLetters.set(1) 
+        self.capLetters.set(1)
+        # Include small letters, 1-yes, 2-no
         self.smaLetters = tk.IntVar()
         self.smaLetters.set(1)
+        # Include numbers, 1-yes, 2-no
         self.numbers = tk.IntVar()
         self.numbers.set(1)
+        # Exclude similar characters, 1-yes, 2-no
         self.excsim = tk.IntVar()
         self.excsim.set(0)
+        # Exclude ambiguous characters, 1-yes, 2-no
         self.excamg = tk.IntVar()
         self.excamg.set(0)
         self.initUI()
         
 
-    def CreatePassword(self):
+    def symbolList(self):
+        '''
+        Function to create a list with all the possible symbols for the 
+        password
+
+        Returns
+        -------
+        aps : list
+            list of symbols with the passworkd.
+
+        '''
         aps = []
-        
+        # Import symbols
         if self.symbols.get():
             aps.extend([i for i in range(33,48)])
             aps.extend([i for i in range(58,65)])
             aps.extend([i for i in range(91,97)])
             aps.extend([i for i in range(123,127)])
-            
+        # Import numbers
         if self.numbers.get():
             aps.extend([i for i in range(48,58)])
-            
+        # Import capital letters
         if self.capLetters.get():
             aps.extend([i for i in range(65,91)])
-            
+        # Import small letters
         if self.smaLetters.get():
             aps.extend([i for i in range(97,123)])
-            
+        # Exclude similar characters
         if self.excsim.get():
             for i in [105, 73, 108, 76, 49, 111, 48, 79]:
-                aps.remove(i)
-                #aps.extend([i for i in [105, 73, 108, 76, 49, 111, 48, 79]])
-            
+                try:
+                    aps.remove(i)
+                except:
+                    pass
+        # Exclude ambiguous characters    
         if self.excamg.get():
             for i in [123, 124, 91, 93, 40, 41, 47, 92, 96, 126, 39, 34, 44, 59, 58, 46, 60, 62]:
-                aps.remove(i)
-                #aps.extend([123, 124, 91, 93, 40, 41, 47, 92, 96, 126, 39, 34, 44, 59, 58, 46, 60, 62])
+                try:
+                    aps.remove(i)
+                except:
+                    pass
+                
+        return aps
         
+    def getNrandom(self, aps):
+        # Randomize the list elements
         random.shuffle(aps)
+        # Pick n random elements
         fc = random.sample(aps, self.length.get())
-            
+        return fc
+    
+    def convertASCII(self, fc):
         fs = ''
         for i in fc:
-            fs += chr(i)
-        
+            fs += chr(i)      
+        return fs
+
+    def createPassword(self):
+        '''
+        Function to generate the password
+
+        Returns
+        -------
+        None.
+
+        '''
+        # Get the symbols list
+        aps = self.symbolList()
+        # Get N symbols
+        fc = self.getNrandom(aps)
+        fs = self.convertASCII(fc)
         self.password.set(fs)    
-
-
         
     def initUI(self):
         '''
@@ -127,7 +168,7 @@ class Window(tk.Frame):
         passBox = tk.Entry(outFrame, text=self.password, width=60, state='normal')
         passBox.grid(row=9, column=0)
 
-        button = tk.Button(outFrame, text='Generate', command=self.CreatePassword)
+        button = tk.Button(outFrame, text='Generate', command=self.createPassword)
         button.grid(row=7, column=0)
 
 
