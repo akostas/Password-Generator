@@ -80,11 +80,24 @@ class Window(tk.Frame):
                 try:
                     aps.remove(i)
                 except:
-                    pass
-                
+                    pass               
         return aps
         
     def getNrandom(self, aps):
+        '''
+        Function to create a list with N characters
+
+        Parameters
+        ----------
+        aps : list
+            list of symbols.
+
+        Returns
+        -------
+        fc : list
+            list of final symbols.
+
+        '''
         # Randomize the list elements
         random.shuffle(aps)
         # Pick n random elements
@@ -92,6 +105,20 @@ class Window(tk.Frame):
         return fc
     
     def convertASCII(self, fc):
+        '''
+        Function to convert ASCII numers to characters
+
+        Parameters
+        ----------
+        fc : list
+            list of ascii numbers.
+
+        Returns
+        -------
+        fs : list
+            list of characters.
+
+        '''
         fs = ''
         for i in fc:
             fs += chr(i)      
@@ -113,6 +140,21 @@ class Window(tk.Frame):
         fs = self.convertASCII(fc)
         self.password.set(fs)    
         
+    def copy_button(self):
+        '''
+        Function to copy password to clipboard
+
+        Returns
+        -------
+        None.
+
+        '''
+        r = tk.Tk()
+        r.withdraw()
+        # r.clipboard_clear()
+        r.clipboard_append(self.password.get())
+        r.destroy()
+        
     def initUI(self):
         '''
         Initialize the main window.
@@ -123,7 +165,7 @@ class Window(tk.Frame):
 
         '''
         # Window title
-        self.parent.title("Gradients Calculator")
+        self.parent.title("Password Generator")
 
         # Input frame
         inFrame = tk.Frame(self.parent)
@@ -162,30 +204,31 @@ class Window(tk.Frame):
         excAmbBox.grid(row=6, column=0)
               
         # Output frame
-        outFrame = tk.Frame(self.parent)
-        outFrame.grid(row=1, column=0)
+        outFrame = tk.Frame(self.parent )
+        outFrame.grid(row=1, column=0, columnspan=2)
 
-        passBox = tk.Entry(outFrame, text=self.password, width=60, state='normal')
-        passBox.grid(row=9, column=0)
+        # Entry to print the password
+        passBox = tk.Entry(outFrame, text=self.password, width=60, state='disabled')
+        passBox.grid(row=1, column=0, columnspan=2)
 
-        button = tk.Button(outFrame, text='Generate', command=self.createPassword)
-        button.grid(row=7, column=0)
+        # Button to generate password
+        genbut = tk.Button(outFrame, text='Generate', command=self.createPassword)
+        genbut.grid(row=0, column=0)
 
+        # Button to copy password
+        copbut = tk.Button(outFrame, text='Copy', command=self.copy_button)
+        copbut.grid(row=0, column=1)
 
     
 
 
 def main():
-
     root = tk.Tk()
     root.resizable(width=False, height=False)
-    ex = Window(root)
-    # root.geometry("460x200")
-    root.geometry("485x240")
+    Window(root)
+    root.geometry("350x240")
     root.mainloop()  
 
 
 if __name__ == '__main__':
     main()
-
-  
