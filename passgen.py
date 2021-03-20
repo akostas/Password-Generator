@@ -88,7 +88,7 @@ class Window(tk.Frame):
         # Randomize the list elements
         random.shuffle(aps)
         # Pick n random elements
-        fc = random.sample(aps, self.length.get())
+        fc = [aps[random.randint(0, len(aps)-1)] for i in range(self.length.get()) ]
         return fc
     
     def convertASCII(self, fc):
